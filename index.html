@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Poster Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://kit.fontawesome.com/f1c3d3b073.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Add this in the <head> section of your HTML file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.1/html2canvas.min.js"></script> -->
+    <!-- Add this in the <head> section of your HTML file -->
+  </head>
+  <body class="bg-gray-100">
+    <div class="md:flex justify-between">
+      <section
+        class="md:w-1/2 border border-gray-300 rounded-xl min-h-screen mx-2"
+      >
+        <div
+          class="text-4xl font-semibold text-center p-4 rounded-xl bg-white mx-5"
+        >
+          <div class="flex justify-center items-center">
+            <i class="fa-solid fa-layer-group"></i>
+            <h2 class="ml-5">Components</h2>
+          </div>
+        </div>
+        <!-- heading part added -->
+        <div
+          id="heading"
+          class="hidden border border-gray-300 relative p-5 mx-5 my-10 rounded-lg"
+        >
+          <div class="flex justify-between absolute -top-4 left-4">
+            <p class="bg-gray-300 text-center w-[75px] rounded-lg">Heading</p>
+          </div>
+          <div class="flex justify-between absolute -top-4 -right-4">
+            <button id="heading-close">
+              <p
+                class="text-red-500 bg-white p-2 text-center font-semibold w-[30px] h-[30px] rounded-full"
+              >
+                X
+              </p>
+            </button>
+          </div>
+          <input
+            oninput="getHeading()"
+            id="heading-input"
+            placeholder="Heading"
+            class="w-full p-5 mt-2 rounded-xl"
+            type="text"
+          />
+          <div class="flex justify-between">
+            <div class="mt-2">
+              <button id="btn-left" class="bg-gray-300 px-5 py-2 rounded-l-lg">
+                <i class="fa-solid fa-circle-user"></i> Left
+              </button>
+              <button id="btn-center" class="bg-gray-300 px-5 py-2">
+                <i class="fa-solid fa-align-center"></i> Center
+              </button>
+              <button id="btn-right" class="bg-gray-300 px-5 py-2 rounded-r-lg">
+                <i class="fa-solid fa-align-right"></i> Right
+              </button>
+            </div>
+            <div class="mt-2">
+              <button id="btn-blue" class="bg-gray-300 px-5 py-2 rounded-l-lg">
+                <i class="fa-solid fa-circle-user"></i> Blue
+              </button>
+              <button id="btn-black" class="bg-gray-300 px-5 py-2">
+                <i class="fa-solid fa-align-center"></i> Black
+              </button>
+              <button id="btn-green" class="bg-gray-300 px-5 py-2 rounded-r-lg">
+                <i class="fa-solid fa-align-right"></i> Green
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- poster image  -->
+        <div
+          id="image"
+          class="hidden border border-gray-300 relative p-5 mx-5 my-10 rounded-lg"
+        >
+          <div class="flex justify-between absolute -top-4 left-4">
+            <p class="bg-gray-300 text-center w-[100px] rounded-lg">
+              Poster Image
+            </p>
+          </div>
+          <div class="flex justify-between absolute -top-4 -right-4">
+            <button id="image-close">
+              <p
+                class="text-red-500 bg-white p-2 text-center font-semibold w-[30px] h-[30px] rounded-full"
+              >
+                X
+              </p>
+            </button>
+          </div>
+          <form>
+            <div
+              class="border border-dashed border-gray-400 rounded-lg p-4 mb-4"
+              id="dropZone"
+            >
+              <div class="flex justify-center items-center h-40">
+                <label for="imageInput" class="cursor-pointer">
+                  <img
+                    class="w-20 ml-24"
+                    src="https://icons-for-free.com/iconfiles/png/512/cloud+upload+file+storage+upload+icon-1320190558968694328.png"
+                    alt=""
+                  />
+                  <span class="text-gray-700 ml-5"
+                    ><span class="font-bold">Click To upload</span> or Drag and
+                    drop</span
+                  >
+                  <br />
+                  <span class="text-gray-700"
+                    >SVG, PNG, JPG or GIF (MAX 800 X 400 px)</span
+                  >
+                  <input
+                    type="file"
+                    accept=".svg, .jpg, .jpeg, .png, .gif"
+                    class="hidden"
+                    id="imageInput"
+                  />
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- description part  -->
+        <div
+          id="description"
+          class="hidden border border-gray-300 relative p-10 mx-5 my-10 rounded-lg"
+        >
+          <div class="flex justify-between absolute -top-4 left-4">
+            <p class="bg-gray-300 text-center w-[100px] rounded-lg">
+              Description
+            </p>
+          </div>
+          <div class="flex justify-between absolute -top-4 -right-4">
+            <button id="description-close">
+              <p
+                class="text-red-500 bg-white p-2 text-center font-semibold w-[30px] h-[30px] rounded-full"
+              >
+                X
+              </p>
+            </button>
+          </div>
+          <textarea
+            oninput="getDescription()"
+            id="description-input"
+            placeholder="Enter Your thoughts here"
+            class="w-full p-5 mt-2 rounded-xl"
+            type="text"
+          ></textarea>
+          <div id="loader" class="ml-2 hidden flex justify-end mt-5">
+            <svg
+              aria-hidden="true"
+              class="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+              viewBox="0 0 100 101"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                fill="currentColor"
+              />
+              <path
+                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                fill="currentFill"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <!-- image discription and heading Button  -->
+        <div class="md:flex justify-between">
+          <button id="btn-heading" class="w-full">
+            <h3
+              class="text-xl text-center text-yellow-900 p-4 bg-yellow-200 shadow-xl rounded-xl mx-2 mt-2"
+            >
+              Heading
+            </h3>
+          </button>
+          <button id="btn-image" class="w-full">
+            <h3
+              class="text-xl text-center text-green-900 p-4 bg-green-200 shadow-xl rounded-xl mx-2 mt-2"
+            >
+              Image
+            </h3>
+          </button>
+          <button id="btn-description" class="w-full">
+            <h3
+              class="text-xl text-center text-blue-900 p-4 bg-blue-200 shadow-xl rounded-xl mx-2 mt-2"
+            >
+              Description
+            </h3>
+          </button>
+        </div>
+      </section>
+
+      <!-- preview section s -->
+      <section
+        class="md:w-1/2 border border-gray-300 relative rounded-xl min-h-screen mx-2 mt-2"
+      >
+        <div
+          class="text-4xl font-semibold text-center p-4 rounded-xl bg-white mx-5"
+        >
+          <div class="flex justify-center items-center">
+            <i class="fa-regular fa-clipboard"></i>
+            <h2 class="ml-5">Preview</h2>
+          </div>
+        </div>
+        <div id="download-content" class="p-5">
+          <!-- heading container  -->
+          <div class="my-10">
+            <h1 id="header-container" class="text-6xl font-bold"></h1>
+          </div>
+          <!-- image container  -->
+          <div
+            class="h-[500px] w-full rounded-lg hidden"
+            id="imagePreviewContainer"
+          >
+            <img src="" alt="Image Preview" id="imagePreview" class="" />
+          </div>
+
+          <!-- description container  -->
+          <div class="my-10 w-full">
+            <p id="description-container" class="text-lg min-w-fit"></p>
+          </div>
+        </div>
+        <div class="absolute bottom-10 left-5">
+          <button id="btn-download">Download</button>
+        </div>
+        <div class="hidden">
+          <img id="img" src="" alt="" />
+        </div>
+      </section>
+    </div>
+    <!-- <script>
+      // document
+      //   .getElementById("btn-download")
+      //   .addEventListener("click", function () {
+      //     const pageContent = document.getElementById("download-content");
+
+      //     const canvas = document.createElement("canvas");
+      //     canvas.width = pageContent.scrollWidth;
+      //     canvas.height = pageContent.scrollHeight;
+
+      //     const context = canvas.getContext("2d");
+
+      //     const DOMURL = window.URL || window.webkitURL || window;
+      //     const img = new Image();
+      //     img.onload = () => {
+      //       const svgBlob = new Blob([pageContent.outerHTML], {
+      //         type: "image/svg+xml;charset=utf-8",
+      //       });
+      //       const url = DOMURL.createObjectURL(svgBlob);
+
+      //       context.drawImage(img, 0, 0);
+
+      //       const dataURL = canvas.toDataURL("image/jpeg");
+
+      //       const downloadLink = document.createElement("a");
+      //       downloadLink.href = dataURL;
+      //       downloadLink.download = "poster.jpg";
+
+      //       document.body.appendChild(downloadLink);
+      //       downloadLink.click();
+      //       document.body.removeChild(downloadLink);
+      //     };
+      //     img.src = url;
+      //   });
+
+      document
+        .getElementById("btn-download")
+        .addEventListener("click", async function () {
+          const pageContent = document.getElementById("download-content");
+          const img = document.getElementById("img");
+
+          const svgBlob = new Blob([pageContent.outerHTML], {
+            type: "image/svg+xml;charset=utf-8",
+          });
+
+          // const img = document.getElementById("img");
+          img.src = URL.createObjectURL(svgBlob);
+          console.log(img.src);
+
+          // async function loadImage() {
+          //   return new Promise((resolve) => {
+          //     img.onload = resolve;
+          //   });
+          // }
+          // await loadImage();
+
+          const canvas = document.createElement("canvas");
+          canvas.width = pageContent.scrollWidth;
+          canvas.height = pageContent.scrollHeight;
+
+          const context = canvas.getContext("2d");
+          context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          // setTimeout(() => {
+          //   context.drawImage(img, 0, 0, canvas.width, canvas.height);
+          //   canvas.toBlob(
+          //     function (blob) {
+          //       const blobUrl = URL.createObjectURL(blob);
+          //       img.onload = () => {
+          //         URL.revokeObjectURL(blobUrl);
+          //       };
+          //       console.log(blobUrl);
+          //       document.getElementById("img").src = blobUrl;
+          //     },
+          //     "image/jpeg",
+          //     0.95
+          //   );
+
+          // const dataURL = canvas.toDataURL("image/jpeg");
+
+          // const downloadLink = document.createElement("a");
+          // downloadLink.href = dataURL;
+          // downloadLink.download = "poster.jpg";
+
+          // document.body.appendChild(downloadLink);
+          // downloadLink.click();
+          // document.body.removeChild(downloadLink);
+          //   }, 1000);
+          //   // context.drawWindow(img, 0, 0, canvas.width, canvas.height);
+        });
+    </script> -->
+    <script src="Script/download.js"></script>
+    <script src="Script/heading.js"></script>
+    <script src="Script/imageUpload.js"></script>
+    <script src="Script/description.js"></script>
+    <!-- Add this in the <head> section of your HTML file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+
+    <!-- <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script> -->
+  </body>
+</html>
